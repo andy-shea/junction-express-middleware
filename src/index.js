@@ -9,8 +9,11 @@ export function junctionProvider(entityManagerOrEntities, mapper) {
 }
 
 export function junctionFlush(req, res, next) {
-  const {locals: {data}, statusCode} = res;
-  if (!data && statusCode !== 204) return next();
+  const {locals, statusCode} = res;
+  if (!Object.prototype.hasOwnProperty.call(locals, 'data') && statusCode !== 204) {
+    return next(); // continue to initial page load render
+  }
+  const {data} = locals;
   req.junction.flush()
       .then(() => (typeof data === 'function') ? data() : data)
       .then(value => res.format({json: () => res.json(value)}))
