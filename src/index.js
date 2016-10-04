@@ -1,4 +1,7 @@
-export function junctionProvider(entityManager) {
+import junction from 'junction-orm';
+
+export function junctionProvider(entityManagerOrEntities, mapper) {
+  const entityManager = mapper ? junction(entityManagerOrConfig, mapper) : entityManagerOrEntities;
   return (req, res, next) => {
     req.junction = entityManager.session();
     next();

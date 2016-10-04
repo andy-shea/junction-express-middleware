@@ -1,7 +1,7 @@
 # Junction Express Middleware
 **Requirements:** Node.js 6+
 
-Express middleware to automatically setup/flush junction pre/post request-response cycle
+Express middleware to automatically setup/flush [Junction](https://github.com/andy-shea/junction-orm) pre/post request-response cycle
 
 ## Install
 
@@ -12,7 +12,8 @@ Express middleware to automatically setup/flush junction pre/post request-respon
 ```
 import {junctionProvider, junctionFlush, setData} from 'junction-express-middleware';
 
-app.use(junctionProvider);
+app.use(junctionProvider(entityManager));
+// or app.use(junctionProvider(entities, mapper)) to have the provider create the entityManager for you before returning the middleware
 
 // ... add normal routes
 function someFunctionCalledInRoute(req, res, next) {
