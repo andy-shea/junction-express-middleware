@@ -5,7 +5,7 @@ Express middleware to automatically setup/flush [Junction](https://github.com/an
 
 ## Install
 
-```npm install junction-express-middleware --save```
+```yarn add junction-express-middleware```
 
 ## Example
 
@@ -16,9 +16,15 @@ app.use(junctionProvider(entityManager));
 // or app.use(junctionProvider(entities, mapper)) to have the provider create the entityManager for you before returning the middleware
 
 // ... add normal routes
-function someFunctionCalledInRoute(req, res, next) {
-  const service = req.junction.get(FooService);
-  service.asyncTaskReturningSomethingOfValue().then(setData(res, next)).catch(next);
+async function someFunctionCalledInRoute(req, res, next) {
+  try {
+    const service = req.junction.get(FooService);
+    const data = await service.asyncTaskReturningSomethingOfValue();
+    setData(res, next, data);
+  }
+  catch(error) {
+    next(error);
+  }
 }
 
 // flush modifications and return JSON of whatever is stored in res.locals.data
