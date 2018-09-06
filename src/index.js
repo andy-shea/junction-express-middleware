@@ -8,30 +8,24 @@ export function junctionProvider(entityManagerOrEntities, mapper) {
   };
 }
 
-export function junctionFlush(req, res, next) {
+export async function junctionFlush(req, res, next) {
   const {locals, statusCode} = res;
   if (!Object.prototype.hasOwnProperty.call(locals, 'data') && statusCode !== 204) {
     return next(); // continue to initial page load render
   }
   const {data} = locals;
-  req.junction.flush()
-      .then(() => (typeof data === 'function') ? data() : data)
-      .then(value => res.format({json: () => res.json(value)}))
-      .catch(next);
+  await req.junction.flush();
+  res.format({
+    json: async () => res.json(typeof data === 'function' ? await data() : data)
+  });
 }
 
 export function setStatus(res, next, status = 204) {
-  return () => {
-    res.status(status);
-    next();
-    return null;
-  };
+  res.status(status);
+  next();
 }
 
-export function setData(res, next, status = 200) {
-  return data => {
-    res.status(status).locals.data = data;
-    next();
-    return null;
-  };
+export function setData(res, next, data, status = 200) {
+  res.status(status).locals.data = data;
+  next();
 }
