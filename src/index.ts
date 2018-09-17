@@ -6,7 +6,7 @@ import {NextFunction, Request, Response} from 'express';
 
 export function junctionProvider(
   entityManagerOrEntities: EntityManager | EntityType<Entity>[],
-  mapper: Mapper
+  mapper?: Mapper
 ) {
   const entityManager = mapper
     ? junction(entityManagerOrEntities as EntityType<Entity>[], mapper)
