@@ -1,6 +1,6 @@
 {
   "name": "junction-express-middleware",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Express middleware to automatically setup/flush junction pre/post request-response cycle",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
